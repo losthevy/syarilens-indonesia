@@ -1,0 +1,724 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SYARILENS</title>
+<meta name="description" content="SYARILENS memindai penawaran pinjaman, paylater, dan investasi digital untuk mengecek legalitas, biaya sebenarnya, dan rambu akad syariah sebelum Anda memutuskan.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F3F6F4; --surface:#FFFFFF; --ink:#14201D; --ink-2:#4A5753; --line:#CFD8D4;
+  --side:#0E2722; --side-ink:#D9E8E2; --side-mute:#8FA8A0; --side-hover:#163A33;
+  --jade:#0F6B58; --jade-ink:#FFFFFF; --jade-soft:#DCEFE8;
+  --riba:#C2412F; --riba-bg:#FAD7D1; --gharar:#9A6A06; --gharar-bg:#F7E5B5;
+  --maysir:#6A4BB8; --maysir-bg:#E6DDF8; --data:#245E9E; --data-bg:#D7E6F6;
+  --tekanan:#9C3F6B; --tekanan-bg:#F4D9E6; --baik:#1F7A4D; --baik-bg:#D8EFE2;
+  --hindari:#B3261E; --hati:#9A6A06; --aman:#1F7A4D;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0F1715; --surface:#16211E; --ink:#E7EFEC; --ink-2:#A6B5B0; --line:#2C3B37;
+    --side:#0A1210; --side-ink:#D9E8E2; --side-mute:#7E958E; --side-hover:#14231F;
+    --jade:#4CC2A3; --jade-ink:#0B1513; --jade-soft:#173A31;
+    --riba:#FF8F7E; --riba-bg:#4A2520; --gharar:#F0C15A; --gharar-bg:#43361A; --maysir:#B9A2F2; --maysir-bg:#2F2650;
+    --data:#8DBDF0; --data-bg:#1C3149; --tekanan:#EE9BC1; --tekanan-bg:#45253A; --baik:#7FD6A8; --baik-bg:#1B3A2B;
+    --hindari:#FF8F7E; --hati:#F0C15A; --aman:#7FD6A8;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0F1715; --surface:#16211E; --ink:#E7EFEC; --ink-2:#A6B5B0; --line:#2C3B37;
+  --side:#0A1210; --side-ink:#D9E8E2; --side-mute:#7E958E; --side-hover:#14231F;
+  --jade:#4CC2A3; --jade-ink:#0B1513; --jade-soft:#173A31;
+  --riba:#FF8F7E; --riba-bg:#4A2520; --gharar:#F0C15A; --gharar-bg:#43361A; --maysir:#B9A2F2; --maysir-bg:#2F2650;
+  --data:#8DBDF0; --data-bg:#1C3149; --tekanan:#EE9BC1; --tekanan-bg:#45253A; --baik:#7FD6A8; --baik-bg:#1B3A2B;
+  --hindari:#FF8F7E; --hati:#F0C15A; --aman:#7FD6A8;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"Plus Jakarta Sans",system-ui,sans-serif;font-size:16px;line-height:1.55}
+a{color:var(--jade)}
+button{font:inherit}
+:focus-visible{outline:3px solid var(--jade);outline-offset:2px;border-radius:6px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.skip{position:absolute;left:-999px;top:8px;background:var(--surface);padding:8px 12px;z-index:50}
+.skip:focus{left:16px}
+
+/* ---------- shell ---------- */
+.shell{display:grid;grid-template-columns:268px minmax(0,1fr);min-height:100vh;background:linear-gradient(to right,var(--side) 268px,transparent 268px)}
+aside.side{background:var(--side);color:var(--side-ink);position:sticky;top:0;height:100vh;display:flex;flex-direction:column;padding:18px 14px;overflow-y:auto}
+.brand{display:flex;align-items:center;gap:12px;padding:4px 8px 18px;text-decoration:none;color:inherit}
+.brand b{font-weight:800;font-size:1.15rem;letter-spacing:.03em;display:block}
+.brand span{font-size:.78rem;color:var(--side-mute)}
+.navgroup{margin:6px 0 12px}
+.navgroup h2{font-size:.78rem;font-weight:600;color:var(--side-mute);margin:0 10px 6px}
+.navbtn{display:flex;align-items:center;gap:12px;width:100%;background:none;border:0;color:var(--side-ink);text-align:left;padding:10px 12px;border-radius:10px;cursor:pointer;font-size:.95rem;min-height:44px}
+.navbtn svg{flex:none;opacity:.85}
+.navbtn:hover{background:var(--side-hover)}
+.navbtn[aria-current="page"]{background:#1D5C4E;color:#fff;font-weight:600}
+.navbtn .count{margin-left:auto;font-size:.75rem;background:rgba(255,255,255,.12);border-radius:999px;padding:1px 8px}
+.side-foot{margin-top:auto;padding:12px 10px 4px;font-size:.78rem;color:var(--side-mute);border-top:1px solid rgba(255,255,255,.08)}
+.side-foot button{background:none;border:1px solid rgba(255,255,255,.2);color:var(--side-ink);border-radius:999px;padding:7px 12px;cursor:pointer;margin-bottom:10px;font-size:.82rem;min-height:38px}
+
+.topbar{display:none}
+main{padding:28px 32px 60px;max-width:1180px;width:100%}
+.pagehead{margin-bottom:20px}
+.pagehead h1{font-size:clamp(1.5rem,3vw,2.1rem);line-height:1.15;margin:0 0 6px;font-weight:800;letter-spacing:-.015em}
+.pagehead p{margin:0;color:var(--ink-2);max-width:68ch}
+.view{display:none}
+.view.active{display:block}
+
+@media (max-width:900px){
+  .shell{grid-template-columns:1fr;background:none}
+  aside.side{position:fixed;left:0;top:0;bottom:0;width:284px;z-index:40;transform:translateX(-100%);transition:transform .25s ease}
+  aside.side.open{transform:none;box-shadow:0 0 0 100vmax rgba(0,0,0,.45)}
+  .topbar{display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:30;background:var(--side);color:var(--side-ink);padding:10px 14px}
+  .topbar button{background:none;border:1px solid rgba(255,255,255,.25);color:inherit;border-radius:10px;min-width:44px;min-height:44px;cursor:pointer}
+  .topbar b{font-weight:800;letter-spacing:.03em}
+  main{padding:20px 16px 48px}
+}
+
+/* ---------- common ---------- */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px}
+.card h2{font-size:1.05rem;margin:0 0 4px}
+.card h3{font-size:1rem;margin:0 0 8px}
+.hint{color:var(--ink-2);font-size:.9rem;margin:0 0 12px}
+.btn{background:var(--jade);color:var(--jade-ink);border:0;border-radius:999px;padding:11px 20px;font-weight:700;cursor:pointer;min-height:44px;display:inline-flex;align-items:center;gap:8px}
+.btn:hover{filter:brightness(1.07)}
+.btn.ghost{background:none;color:var(--ink);border:1px solid var(--line);font-weight:600}
+.btn.small{padding:7px 14px;min-height:38px;font-size:.88rem}
+.chip{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:7px 12px;font-size:.86rem;cursor:pointer;min-height:38px}
+.chip:hover,.chip[aria-pressed="true"]{border-color:var(--jade);background:var(--jade-soft)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.grid2{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:20px;align-items:start}
+@media (max-width:1100px){.grid2{grid-template-columns:1fr}}
+input[type=text],input[type=search],input[inputmode],select,textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font:inherit;background:var(--paper);color:var(--ink);min-height:44px}
+label.f{display:block;font-size:.8rem;color:var(--ink-2);margin-bottom:4px;font-weight:600}
+.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.status{display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:.88rem;padding:4px 10px;border-radius:999px}
+.st-bad{background:var(--riba-bg);color:var(--riba)} .st-warn{background:var(--gharar-bg);color:var(--gharar)} .st-good{background:var(--baik-bg);color:var(--baik)}
+.tabular{font-variant-numeric:tabular-nums}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:11px 18px;border-radius:999px;font-size:.92rem;opacity:0;pointer-events:none;transition:opacity .25s;z-index:60;max-width:92vw;text-align:center}
+.toast.show{opacity:1}
+
+/* ---------- scanner ---------- */
+.steps{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 16px;padding:0;list-style:none}
+.steps li{display:flex;align-items:center;gap:8px;font-size:.86rem;color:var(--ink-2);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:6px 12px 6px 6px}
+.steps li span{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--jade-soft);color:var(--jade);font-weight:800;font-size:.8rem}
+textarea#offer{min-height:190px;resize:vertical;font-family:"Source Serif 4",Georgia,serif;font-size:1.02rem;line-height:1.6;padding:14px}
+.drop{border:1.5px dashed var(--line);border-radius:12px;padding:12px;text-align:center;color:var(--ink-2);font-size:.88rem;margin-top:10px;cursor:pointer}
+.drop.over{border-color:var(--jade);background:var(--jade-soft);color:var(--ink)}
+.ocr{font-size:.85rem;color:var(--ink-2);min-height:1.2em;margin-top:8px}
+.welcome{display:flex;gap:14px;align-items:flex-start;background:var(--jade-soft);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:16px}
+.welcome[hidden]{display:none}
+.welcome p{margin:0;font-size:.92rem}
+.welcome button{margin-left:auto;flex:none}
+
+.empty{color:var(--ink-2)}
+.empty strong{display:block;color:var(--ink);font-size:1.02rem;margin-bottom:4px}
+.verdict{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center;padding:16px 18px;border-radius:16px;border:2px solid currentColor;margin-bottom:14px;background:var(--surface)}
+.verdict h2{margin:0;font-size:1.3rem;line-height:1.2}
+.verdict p{margin:4px 0 0;color:var(--ink);font-size:.95rem}
+.v-hindari{color:var(--hindari)} .v-hati{color:var(--hati)} .v-aman{color:var(--aman)}
+.dial circle.prog{transition:stroke-dashoffset .8s ease}
+.lens{margin-bottom:14px}
+.offer{font-family:"Source Serif 4",Georgia,serif;font-size:1.06rem;line-height:1.85;white-space:pre-wrap;word-wrap:break-word}
+mark{padding:1px 3px;border-radius:4px;color:inherit;cursor:pointer;border-bottom:2px solid}
+mark.riba{background:var(--riba-bg);border-color:var(--riba)} mark.denda{background:var(--riba-bg);border-color:var(--riba);border-bottom-style:dashed}
+mark.gharar{background:var(--gharar-bg);border-color:var(--gharar)} mark.maysir{background:var(--maysir-bg);border-color:var(--maysir)}
+mark.data{background:var(--data-bg);border-color:var(--data)} mark.tekanan{background:var(--tekanan-bg);border-color:var(--tekanan)} mark.baik{background:var(--baik-bg);border-color:var(--baik)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:10px;font-size:.8rem;color:var(--ink-2)}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.tab{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 14px;cursor:pointer;font-weight:600;font-size:.9rem;min-height:40px}
+.tab[aria-selected="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.tabpanel{display:none}.tabpanel.on{display:block}
+.flag{border-left:4px solid;padding:8px 12px;margin:8px 0;border-radius:0 8px 8px 0;background:var(--paper)}
+.flag b{display:block;font-size:.93rem}
+.flag small{color:var(--ink-2);display:block;margin-top:2px}
+.flag.riba,.flag.denda{border-color:var(--riba)} .flag.gharar{border-color:var(--gharar)} .flag.maysir{border-color:var(--maysir)}
+.flag.data{border-color:var(--data)} .flag.tekanan{border-color:var(--tekanan)} .flag.baik{border-color:var(--baik)}
+.flag.pulse{box-shadow:0 0 0 3px var(--jade-soft)}
+.bignum{font-size:1.9rem;font-weight:800;letter-spacing:-.02em;line-height:1.1;margin-top:10px}
+.bignum small{font-size:.85rem;font-weight:600;color:var(--ink-2);display:block;letter-spacing:0;margin-top:2px}
+.bars{display:grid;gap:10px;margin-top:14px}
+.bar{display:grid;grid-template-columns:170px 1fr auto;gap:10px;align-items:center;font-size:.88rem}
+@media (max-width:560px){.bar{grid-template-columns:1fr auto}.bar .track{grid-column:1/-1}}
+.track{height:14px;background:var(--paper);border-radius:999px;overflow:hidden;border:1px solid var(--line)}
+.fill{height:100%;border-radius:999px;transition:width .6s ease}
+.fill.a{background:var(--riba)} .fill.b{background:var(--gharar)} .fill.c{background:var(--baik)} .fill.d{background:var(--data)}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
+.exits{margin:6px 0 0;padding-left:18px}
+.exits li{margin-bottom:6px}
+
+/* ---------- other views ---------- */
+.list{display:grid;gap:10px}
+.item{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.item p{margin:2px 0 0;color:var(--ink-2);font-size:.86rem;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.item .meta{font-size:.78rem;color:var(--ink-2)}
+.dot{width:12px;height:12px;border-radius:50%}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px}
+.stat .v{font-size:1.7rem;font-weight:800;letter-spacing:-.02em}
+.stat .k{color:var(--ink-2);font-size:.86rem}
+.schemes{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:14px}
+.scheme{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;border-top:5px solid}
+.scheme.s-pinjol{border-top-color:var(--riba)} .scheme.s-pay{border-top-color:var(--gharar)} .scheme.s-mur{border-top-color:var(--data)} .scheme.s-qardh{border-top-color:var(--baik)}
+.scheme h3{margin:0 0 6px;font-size:1rem}
+.scheme dl{margin:8px 0 0;display:grid;grid-template-columns:1fr auto;gap:4px 10px;font-size:.88rem}
+.scheme dt{color:var(--ink-2)} .scheme dd{margin:0;font-weight:700;text-align:right}
+.terms{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.term{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px}
+.term h3{margin:0 0 6px;font-size:1.05rem;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.term p{margin:0 0 8px;font-size:.92rem}
+.term small{color:var(--ink-2)}
+.quiz-q{font-size:1.1rem;font-weight:700;margin:0 0 12px}
+.opts{display:grid;gap:8px}
+.opt{text-align:left;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:12px;padding:12px 14px;cursor:pointer;min-height:48px}
+.opt:hover{border-color:var(--jade)}
+.opt.right{border-color:var(--baik);background:var(--baik-bg)}
+.opt.wrong{border-color:var(--riba);background:var(--riba-bg)}
+.progress{height:8px;background:var(--line);border-radius:999px;overflow:hidden;margin-bottom:16px}
+.progress div{height:100%;background:var(--jade);transition:width .3s}
+.checklist label{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--line);cursor:pointer;font-size:.93rem}
+.checklist input{width:20px;height:20px;margin-top:2px;flex:none;accent-color:var(--jade)}
+table.rules{width:100%;border-collapse:collapse;background:var(--surface);border:1px solid var(--line);font-size:.9rem}
+table.rules th,table.rules td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+table.rules th{background:var(--jade-soft)}
+.tablewrap{overflow-x:auto;border-radius:12px}
+.note{font-size:.84rem;color:var(--ink-2);margin-top:14px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Lewati ke konten</a>
+<div class="topbar">
+  <button type="button" id="menuBtn" aria-label="Buka menu" aria-controls="side" aria-expanded="false">
+    <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+  </button>
+  <b>SYARILENS</b>
+</div>
+<div class="shell">
+  <aside class="side" id="side" aria-label="Menu utama">
+    <a class="brand" href="#pindai">
+      <svg width="38" height="38" viewBox="0 0 40 40" aria-hidden="true"><circle cx="17" cy="17" r="12" fill="none" stroke="#4CC2A3" stroke-width="3.5"/><path d="M26 26 L35 35" stroke="#4CC2A3" stroke-width="4" stroke-linecap="round"/><path d="M11 17.5 l4 4 l8 -9" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div><b>SYARILENS</b><span>Pindai dulu, baru putuskan</span></div>
+    </a>
+    <nav>
+      <div class="navgroup"><h2>Periksa</h2>
+        <button class="navbtn" data-view="pindai"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 16l4.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Pindai penawaran</button>
+        <button class="navbtn" data-view="legalitas"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Cek legalitas</button>
+        <button class="navbtn" data-view="simulasi"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 7h8M8 12h2M12 12h2M16 12h0M8 16h2M12 16h2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Simulasi biaya</button>
+      </div>
+      <div class="navgroup"><h2>Belajar</h2>
+        <button class="navbtn" data-view="kamus"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h10a4 4 0 014 4v12H9a4 4 0 01-4-4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 9h6M9 13h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Kamus akad</button>
+        <button class="navbtn" data-view="kuis"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9.5 9.5a2.5 2.5 0 114 2c-1 .7-1.5 1.2-1.5 2.5M12 17h0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Kuis literasi</button>
+        <button class="navbtn" data-view="aturan"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16H6z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 8h6M9 12h6M9 16h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Cara menilai</button>
+      </div>
+      <div class="navgroup"><h2>Milik saya</h2>
+        <button class="navbtn" data-view="riwayat"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Riwayat<span class="count" id="histCount">0</span></button>
+        <button class="navbtn" data-view="dampak"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19h16M7 16V10M12 16V6M17 16v-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Dampak saya</button>
+        <button class="navbtn" data-view="lapor"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 21V4M5 4h11l-2 4 2 4H5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></svg>Lapor modus</button>
+      </div>
+    </nav>
+    <div class="side-foot">
+      <button type="button" id="themeBtn">Ganti tema terang atau gelap</button>
+      <div>Purwarupa esai SBF 2026. Nama penyelenggara dan contoh penawaran adalah fiktif untuk peragaan.</div>
+    </div>
+  </aside>
+
+  <main id="main">
+    <!-- ================= PINDAI ================= -->
+    <section class="view" id="v-pindai" aria-labelledby="h-pindai">
+      <div class="pagehead">
+        <h1 id="h-pindai">Lihat dulu apa yang sebenarnya Anda setujui</h1>
+        <p>Tempel teks atau unggah tangkapan layar penawaran pinjaman, <i>paylater</i>, atau investasi. SYARILENS memeriksa legalitas, menghitung biaya sebenarnya, menandai rambu akad, lalu menunjukkan jalan keluar syariah.</p>
+      </div>
+      <div class="welcome" id="welcome" hidden>
+        <svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="var(--jade)"/><path d="M12 7v6M12 16.5h0" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg>
+        <p><b>Baru pertama kali?</b> Tekan contoh "Pinjol cair kilat" untuk melihat cara kerja SYARILENS dalam lima detik.</p>
+        <button class="btn small ghost" type="button" id="welcomeClose">Mengerti</button>
+      </div>
+      <ol class="steps" aria-label="Langkah pemakaian">
+        <li><span>1</span>Tempel atau unggah penawaran</li>
+        <li><span>2</span>Pindai</li>
+        <li><span>3</span>Baca putusan dan jalan keluar</li>
+      </ol>
+      <div class="grid2">
+        <div class="card">
+          <h2>Penawaran yang ingin dicek</h2>
+          <p class="hint">Salin dari pesan WhatsApp, iklan, atau layar aplikasi.</p>
+          <label for="offer" class="sr-only">Teks penawaran</label>
+          <textarea id="offer" placeholder="Contoh: Pinjam Rp1.000.000 cair 5 menit, bunga 0,8% per hari, tenor 14 hari..."></textarea>
+          <div class="drop" id="drop" tabindex="0" role="button" aria-label="Unggah tangkapan layar">
+            <input type="file" id="imgInput" accept="image/*" class="sr-only" tabindex="-1">
+            Seret tangkapan layar ke sini, tempel gambar dengan Ctrl+V, atau ketuk untuk memilih berkas
+          </div>
+          <div class="ocr" id="ocrStatus" aria-live="polite"></div>
+          <p class="hint" style="margin:12px 0 6px">Atau coba contoh</p>
+          <div class="row" role="group" aria-label="Contoh penawaran">
+            <button class="chip" type="button" data-sample="0">Pinjol cair kilat</button>
+            <button class="chip" type="button" data-sample="1"><i>Paylater</i> belanja</button>
+            <button class="chip" type="button" data-sample="2">Investasi "syariah" cuan harian</button>
+            <button class="chip" type="button" data-sample="3">Pembiayaan murabahah</button>
+          </div>
+          <div class="row" style="margin-top:16px">
+            <button class="btn" type="button" id="scanBtn">Pindai penawaran</button>
+            <button class="btn ghost" type="button" id="pasteBtn">Tempel dari papan klip</button>
+            <button class="btn ghost" type="button" id="clearBtn">Kosongkan</button>
+          </div>
+          <p class="note">Pintasan papan ketik: Ctrl+Enter untuk memindai.</p>
+        </div>
+        <div id="result" aria-live="polite">
+          <div class="card empty">
+            <strong>Hasil pindaian muncul di sini</strong>
+            Anda akan melihat putusan, biaya dalam rupiah, penanda pada teks penawaran, dan pilihan yang lebih aman.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= LEGALITAS ================= -->
+    <section class="view" id="v-legalitas" aria-labelledby="h-legal">
+      <div class="pagehead"><h1 id="h-legal">Cek legalitas penyelenggara</h1>
+        <p>Ketik nama aplikasi atau perusahaan. Purwarupa memakai daftar peragaan; versi penerapan menarik daftar resmi OJK dan Satgas PASTI.</p></div>
+      <div class="grid2">
+        <div class="card">
+          <label class="f" for="legalQ">Nama penyelenggara</label>
+          <input type="search" id="legalQ" placeholder="Misalnya Barokah atau KasCepat88" autocomplete="off">
+          <div class="list" id="legalList" style="margin-top:14px"></div>
+          <p class="note">Tidak menemukan nama yang dicari? Hubungi Kontak OJK 157 atau WhatsApp 081-157-157-157 sebelum mengirim data apa pun.</p>
+        </div>
+        <div class="card">
+          <h2>Daftar ciri pinjol ilegal</h2>
+          <p class="hint">Centang yang Anda temukan pada penawaran. Satu ciri saja sudah cukup untuk berhati-hati.</p>
+          <div class="checklist" id="checklist"></div>
+          <div id="checkOut" style="margin-top:14px"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SIMULASI ================= -->
+    <section class="view" id="v-simulasi" aria-labelledby="h-sim">
+      <div class="pagehead"><h1 id="h-sim">Simulasi biaya sebelum meminjam</h1>
+        <p>Bandingkan empat cara mendapatkan dana yang sama. Semua angka dapat diubah dan langsung dihitung ulang.</p></div>
+      <div class="card">
+        <div class="fields">
+          <div><label class="f" for="s-need">Dana yang dibutuhkan (Rp)</label><input id="s-need" inputmode="numeric" value="1.000.000"></div>
+          <div><label class="f" for="s-days">Lama meminjam (hari)</label><input id="s-days" inputmode="numeric" value="30"></div>
+          <div><label class="f" for="s-income">Penghasilan per bulan (Rp, opsional)</label><input id="s-income" inputmode="numeric" value="3.000.000"></div>
+        </div>
+        <details style="margin-top:14px"><summary style="cursor:pointer;font-weight:600">Ubah asumsi tiap skema</summary>
+          <div class="fields" style="margin-top:12px">
+            <div><label class="f" for="s-pr">Pinjol, bunga per hari (%)</label><input id="s-pr" inputmode="decimal" value="0,8"></div>
+            <div><label class="f" for="s-pc">Pinjol, potongan di muka (%)</label><input id="s-pc" inputmode="decimal" value="15"></div>
+            <div><label class="f" for="s-yr">Paylater, bunga per bulan (%)</label><input id="s-yr" inputmode="decimal" value="2,95"></div>
+            <div><label class="f" for="s-ya">Paylater, biaya admin (%)</label><input id="s-ya" inputmode="decimal" value="1"></div>
+            <div><label class="f" for="s-mm">Murabahah, margin per tahun (%)</label><input id="s-mm" inputmode="decimal" value="12"></div>
+            <div><label class="f" for="s-qa">Qardhul hasan, biaya riil (Rp)</label><input id="s-qa" inputmode="numeric" value="0"></div>
+          </div>
+        </details>
+      </div>
+      <div class="schemes" id="schemes"></div>
+      <div class="card" style="margin-top:14px"><h3>Total yang harus dibayar</h3><div class="bars" id="simBars"></div>
+        <p class="note">Pinjol dan <i>paylater</i> memakai bunga sehingga tidak sesuai syariah. Murabahah adalah jual beli dengan margin tetap sejak akad, dan qardhul hasan hanya mengembalikan pokok. Acuan batas biaya adalah 0,1% per hari untuk pindar konsumtif 2026.</p></div>
+    </section>
+
+    <!-- ================= KAMUS ================= -->
+    <section class="view" id="v-kamus" aria-labelledby="h-kamus">
+      <div class="pagehead"><h1 id="h-kamus">Kamus akad</h1><p>Istilah yang sering muncul dalam penawaran keuangan, dijelaskan dalam bahasa sehari-hari beserta rujukannya.</p></div>
+      <div class="row" style="margin-bottom:14px">
+        <div style="flex:1;min-width:220px"><label class="sr-only" for="kamusQ">Cari istilah</label><input type="search" id="kamusQ" placeholder="Cari istilah, misalnya gharar"></div>
+        <div class="row" role="group" aria-label="Saring istilah">
+          <button class="chip" type="button" data-kf="semua" aria-pressed="true">Semua</button>
+          <button class="chip" type="button" data-kf="dilarang" aria-pressed="false">Dilarang</button>
+          <button class="chip" type="button" data-kf="dibolehkan" aria-pressed="false">Dibolehkan</button>
+        </div>
+      </div>
+      <div class="terms" id="terms"></div>
+    </section>
+
+    <!-- ================= KUIS ================= -->
+    <section class="view" id="v-kuis" aria-labelledby="h-kuis">
+      <div class="pagehead"><h1 id="h-kuis">Kuis literasi keuangan syariah</h1><p>Enam pertanyaan singkat untuk melatih mata membaca penawaran. Skor terbaik tersimpan di perangkat Anda.</p></div>
+      <div class="card" id="quizBox" style="max-width:720px"></div>
+    </section>
+
+    <!-- ================= ATURAN ================= -->
+    <section class="view" id="v-aturan" aria-labelledby="h-aturan">
+      <div class="pagehead"><h1 id="h-aturan">Cara SYARILENS menilai</h1>
+        <p>Setiap penanda berasal dari daftar periksa terbuka. Dalam penerapan nyata, daftar ini disahkan Dewan Pengawas Syariah mitra. SYARILENS memberi penanda risiko, bukan fatwa.</p></div>
+      <div class="tablewrap"><table class="rules"><thead><tr><th>Penanda</th><th>Yang dicari dalam teks</th><th>Mengapa penting</th><th>Rujukan</th></tr></thead><tbody id="rulesBody"></tbody></table></div>
+    </section>
+
+    <!-- ================= RIWAYAT ================= -->
+    <section class="view" id="v-riwayat" aria-labelledby="h-riw">
+      <div class="pagehead"><h1 id="h-riw">Riwayat pindaian</h1><p>Tersimpan hanya di perangkat ini. Ketuk salah satu untuk membuka kembali hasilnya.</p></div>
+      <div class="row" style="margin-bottom:12px"><button class="btn ghost small" type="button" id="clearHist">Hapus semua riwayat</button></div>
+      <div class="list" id="histList"></div>
+    </section>
+
+    <!-- ================= DAMPAK ================= -->
+    <section class="view" id="v-dampak" aria-labelledby="h-dampak">
+      <div class="pagehead"><h1 id="h-dampak">Dampak saya</h1><p>Setiap penawaran berbahaya yang Anda tolak adalah uang yang tetap di tangan Anda.</p></div>
+      <div class="stats" id="stats"></div>
+      <div class="card" style="margin-top:14px">
+        <h3>Ajak teman ikut memeriksa</h3>
+        <p class="hint">Satu pesan bisa mencegah satu teman terjerat pinjol ilegal.</p>
+        <div class="row"><button class="btn" type="button" id="shareImpact">Bagikan lewat WhatsApp</button><button class="btn ghost" type="button" id="resetImpact">Atur ulang angka</button></div>
+      </div>
+    </section>
+
+    <!-- ================= LAPOR ================= -->
+    <section class="view" id="v-lapor" aria-labelledby="h-lapor">
+      <div class="pagehead"><h1 id="h-lapor">Laporkan modus baru</h1><p>Laporan membantu memperbarui daftar periksa. Ringkasan laporan juga bisa Anda salin untuk dikirim ke Kontak OJK 157.</p></div>
+      <div class="grid2">
+        <form class="card" id="reportForm">
+          <div class="fields">
+            <div><label class="f" for="r-type">Jenis modus</label>
+              <select id="r-type"><option>Pinjol ilegal</option><option>Investasi bodong</option><option>Penipuan belanja daring</option><option>Pinjaman berlabel syariah palsu</option><option>Lainnya</option></select></div>
+            <div><label class="f" for="r-chan">Diterima lewat</label>
+              <select id="r-chan"><option>WhatsApp</option><option>SMS</option><option>Media sosial</option><option>Situs atau aplikasi</option><option>Lainnya</option></select></div>
+          </div>
+          <div style="margin-top:12px"><label class="f" for="r-name">Nama atau akun pelaku</label><input type="text" id="r-name" placeholder="Nama aplikasi, nomor, atau akun"></div>
+          <div style="margin-top:12px"><label class="f" for="r-text">Isi penawaran</label><textarea id="r-text" rows="5" placeholder="Tempel isi pesan atau iklan"></textarea></div>
+          <div class="row" style="margin-top:14px"><button class="btn" type="submit">Kirim laporan</button><button class="btn ghost" type="button" id="useScan">Ambil dari pindaian terakhir</button></div>
+          <p class="ocr" id="reportMsg" role="status"></p>
+        </form>
+        <div class="card"><h2>Laporan saya</h2><p class="hint">Tersimpan di perangkat ini.</p><div class="list" id="reportList"></div></div>
+      </div>
+    </section>
+  </main>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function(){
+"use strict";
+/* ================= DATA PERAGAAN ================= */
+const REGISTRY = [
+  {name:"Barokah Fintek Syariah", aliases:["barokah fintek"], status:"berizin-syariah", jenis:"Pindar syariah berizin, memiliki DPS"},
+  {name:"Amanah Usaha Pindar Syariah", aliases:["amanah usaha"], status:"berizin-syariah", jenis:"Pindar syariah berizin untuk modal usaha"},
+  {name:"BPRS Cahaya Umat", aliases:["bprs cahaya umat","cahaya umat"], status:"berizin-syariah", jenis:"Bank pembiayaan rakyat syariah"},
+  {name:"BMT Sejahtera Bersama", aliases:["bmt sejahtera"], status:"berizin-syariah", jenis:"Koperasi syariah (BMT) berbadan hukum"},
+  {name:"Tunas Paylater", aliases:["tunas paylater","tunas pindar"], status:"berizin", jenis:"Paylater konvensional berizin"},
+  {name:"Sahabat Pindar Nusantara", aliases:["sahabat pindar"], status:"berizin", jenis:"Pindar konvensional berizin"},
+  {name:"Kredit Kilat Mitra", aliases:["kredit kilat mitra"], status:"berizin", jenis:"Pindar konvensional berizin"},
+  {name:"KasCepat88", aliases:["kascepat88","kas cepat 88","kascepat"], status:"ilegal", jenis:"Tercatat dalam daftar entitas yang dihentikan"},
+  {name:"Robot Cuan Syariah", aliases:["robot cuan","robotcuan"], status:"ilegal", jenis:"Tercatat dalam daftar investasi ilegal"},
+  {name:"Rupiah Kilat Instan", aliases:["rupiah kilat"], status:"ilegal", jenis:"Tercatat dalam daftar entitas yang dihentikan"},
+  {name:"DanaGampang Express", aliases:["danagampang","dana gampang"], status:"ilegal", jenis:"Tercatat dalam daftar entitas yang dihentikan"},
+  {name:"Hijrah Profit Club", aliases:["hijrah profit"], status:"ilegal", jenis:"Tercatat dalam daftar investasi ilegal"}
+];
+const SAMPLES = [
+  "KasCepat88, pinjaman cair 5 menit tanpa BI checking! Pinjam Rp1.000.000 tenor 7 hari, bunga 1% per hari, potongan biaya layanan 20% di muka. Denda keterlambatan 2% per hari dari total tagihan. Wajib izinkan akses kontak dan galeri untuk verifikasi. Promo hari ini saja, hubungi WA 0812-0000-0088.",
+  "Tunas Paylater (berizin dan diawasi OJK): belanja sekarang bayar nanti Rp2.000.000, cicil 3 bulan dengan bunga 2,95% per bulan. Biaya admin 1% per transaksi. Denda keterlambatan 0,1% per hari. Syarat dan ketentuan berlaku.",
+  "Robot Cuan Syariah: investasi syariah deposit mulai Rp500.000, profit pasti 3% per hari, dijamin tanpa rugi! Bonus spin berhadiah iPhone untuk setiap ajak teman. Kuota terbatas, daftar segera lewat link di WA.",
+  "Barokah Fintek Syariah (berizin OJK, diawasi Dewan Pengawas Syariah): pembiayaan modal usaha Rp5.000.000 dengan akad murabahah, harga jual Rp5.400.000 dicicil 6 bulan. Tidak ada denda berbunga; keterlambatan nasabah mampu dikenakan ta'zir yang disalurkan sebagai dana sosial."
+];
+const RULES = [
+  {key:"riba",label:"Riba",color:"riba",patterns:[/\bbunga\b[^.]{0,30}?\d+(?:[.,]\d+)?\s*%[^.]{0,12}?(?:per|\/)\s*(?:hari|minggu|bulan|tahun)/gi,/\bbunga\b/gi,/\binterest\b/gi],
+   why:"Tambahan atas pokok pinjaman yang diperjanjikan di awal. Pinjaman berbunga tetap haram walau kedua pihak rela.",ref:"QS Al-Baqarah 275; Ijtima Ulama Komisi Fatwa MUI VII (2021)",find:"kata \"bunga\" atau persentase tambahan per hari/bulan atas pinjaman"},
+  {key:"denda",label:"Denda berlipat",color:"denda",patterns:[/denda[^.]{0,40}?\d+(?:[.,]\d+)?\s*%[^.]{0,30}?(?:per|\/)\s*hari(?:[^.]{0,25}?total tagihan)?/gi],
+   why:"Denda yang terus bertambah per hari menjadi tambahan berbasis waktu. Dalam syariah, sanksi hanya untuk nasabah mampu yang sengaja menunda, dan dananya disalurkan sebagai dana sosial.",ref:"Fatwa DSN-MUI No. 17/DSN-MUI/IX/2000; No. 43/DSN-MUI/VIII/2004",find:"denda persentase per hari, terutama dari total tagihan"},
+  {key:"gharar",label:"Gharar (tidak jelas)",color:"gharar",patterns:[/syarat dan ketentuan berlaku/gi,/biaya (?:lain|tambahan|layanan)[^.]{0,20}?(?:menyesuaikan|dapat berubah|tanpa rincian)/gi,/potongan biaya layanan\s*\d+(?:[.,]\d+)?\s*%\s*di muka/gi,/mulai dari\s*\d+(?:[.,]\d+)?\s*%/gi],
+   why:"Biaya yang dipotong di muka atau tidak dirinci membuat dana yang diterima dan kewajiban sebenarnya tidak jelas sejak akad.",ref:"Fatwa DSN-MUI No. 117/DSN-MUI/II/2018",find:"potongan di muka, \"syarat dan ketentuan berlaku\", biaya yang \"menyesuaikan\""},
+  {key:"maysir",label:"Maysir atau janji untung pasti",color:"maysir",patterns:[/profit pasti(?:\s*\d+(?:[.,]\d+)?\s*%\s*per\s*(?:hari|minggu|bulan))?/gi,/dijamin tanpa rugi/gi,/(?:untung|cuan|imbal hasil) (?:pasti|dijamin)/gi,/spin berhadiah(?:\s+[A-Za-z]+)?/gi,/\bundian\b/gi,/\bjackpot\b/gi],
+   why:"Keuntungan yang dijamin tanpa risiko atau hadiah untung-untungan bertentangan dengan prinsip bagi hasil dan menjadi ciri utama investasi bodong.",ref:"QS Al-Maidah 90",find:"\"profit pasti\", \"dijamin tanpa rugi\", spin, undian"},
+  {key:"data",label:"Akses data berlebihan",color:"data",patterns:[/akses kontak(?: dan galeri)?/gi,/akses galeri/gi,/semua kontak/gi],
+   why:"Pindar berizin hanya boleh meminta akses kamera, mikrofon, dan lokasi. Akses kontak dan galeri adalah ciri pinjol ilegal dan membuka jalan penagihan yang mempermalukan.",ref:"POJK No. 40 Tahun 2024; UU No. 27 Tahun 2022; Ijtima Ulama MUI VII (2021)",find:"permintaan akses kontak, galeri, atau seluruh data ponsel"},
+  {key:"tekanan",label:"Tekanan dan jalur tidak resmi",color:"tekanan",patterns:[/cair \d+ menit/gi,/tanpa bi checking/gi,/promo hari ini saja/gi,/kuota terbatas/gi,/daftar segera/gi,/(?:hubungi|lewat link di|via) wa\b[^.]{0,20}/gi],
+   why:"Desakan waktu dan penawaran lewat WhatsApp pribadi mendorong keputusan tanpa menimbang kemampuan bayar. Penyelenggara berizin tidak menawarkan pinjaman lewat pesan pribadi.",ref:"POJK No. 22 Tahun 2023",find:"\"cair 5 menit\", \"tanpa BI checking\", \"hari ini saja\", tautan WA"},
+  {key:"baik",label:"Sinyal syariah",color:"baik",patterns:[/akad (?:murabahah|qardh|ijarah|musyarakah|mudharabah|wakalah)/gi,/dewan pengawas syariah/gi,/ta'zir[^.]{0,40}dana sosial/gi,/tidak ada denda berbunga/gi],
+   why:"Akad disebut jelas dan ada pengawas syariah. Tetap cek legalitasnya, karena label \"syariah\" juga sering dipakai penipu.",ref:"Fatwa DSN-MUI No. 04/DSN-MUI/IV/2000; No. 19/DSN-MUI/IV/2001",find:"nama akad, DPS, ta'zir untuk dana sosial"}
+];
+const TERMS = [
+  {t:"Riba",s:"dilarang",d:"Tambahan atas pokok utang yang disyaratkan sejak awal, misalnya bunga per hari pada pinjol.",c:"Pinjam Rp1 juta wajib kembali Rp1,07 juta dalam seminggu.",r:"QS Al-Baqarah 275; Ijtima Ulama MUI VII (2021)"},
+  {t:"Gharar",s:"dilarang",d:"Ketidakjelasan dalam akad, misalnya biaya yang tidak dirinci atau dana yang diterima berbeda dari yang dijanjikan.",c:"\"Biaya layanan menyesuaikan\" atau potongan 20% di muka yang baru terlihat setelah cair.",r:"Fatwa DSN-MUI No. 117/DSN-MUI/II/2018"},
+  {t:"Maysir",s:"dilarang",d:"Untung-untungan atau perjudian, termasuk janji keuntungan pasti tanpa risiko usaha nyata.",c:"\"Profit pasti 3% per hari\" atau spin berhadiah.",r:"QS Al-Maidah 90"},
+  {t:"Qardh dan qardhul hasan",s:"dibolehkan",d:"Pinjaman kebajikan. Peminjam hanya mengembalikan pokok, tanpa tambahan yang disyaratkan.",c:"BMT atau lembaga amil zakat meminjamkan Rp800 ribu untuk biaya berobat, kembali Rp800 ribu.",r:"Fatwa DSN-MUI No. 19/DSN-MUI/IV/2001"},
+  {t:"Murabahah",s:"dibolehkan",d:"Jual beli dengan harga pokok dan margin keuntungan yang disepakati di awal. Cicilan tetap dan tidak bertambah karena waktu.",c:"Bank membeli laptop Rp5 juta lalu menjualnya Rp5,4 juta dicicil 6 bulan.",r:"Fatwa DSN-MUI No. 04/DSN-MUI/IV/2000"},
+  {t:"Ijarah",s:"dibolehkan",d:"Sewa atas manfaat barang atau jasa dengan upah (ujrah) yang jelas.",c:"Sewa kios Rp500 ribu per bulan.",r:"Fatwa DSN-MUI No. 09/DSN-MUI/IV/2000"},
+  {t:"Musyarakah",s:"dibolehkan",d:"Kerja sama modal antara dua pihak atau lebih. Keuntungan dibagi sesuai kesepakatan, kerugian sesuai porsi modal.",c:"Dua orang patungan membuka usaha katering.",r:"Fatwa DSN-MUI No. 08/DSN-MUI/IV/2000"},
+  {t:"Mudharabah",s:"dibolehkan",d:"Satu pihak menyediakan modal, pihak lain mengelola usaha. Keuntungan dibagi sesuai nisbah.",c:"Tabungan mudharabah di bank syariah.",r:"Fatwa DSN-MUI No. 07/DSN-MUI/IV/2000"},
+  {t:"Wadiah",s:"dibolehkan",d:"Titipan dana yang dapat diambil kapan saja.",c:"Tabungan wadiah untuk dana darurat.",r:"Fatwa DSN-MUI No. 02/DSN-MUI/IV/2000"},
+  {t:"Wakalah",s:"dibolehkan",d:"Pemberian kuasa kepada pihak lain untuk melakukan suatu tindakan atas nama pemberi kuasa.",c:"Bank menjadi wakil untuk membeli barang pesanan nasabah.",r:"Fatwa DSN-MUI No. 10/DSN-MUI/IV/2000"},
+  {t:"Ta'zir",s:"dibolehkan",d:"Sanksi bagi nasabah mampu yang sengaja menunda pembayaran. Dananya disalurkan sebagai dana sosial, bukan pendapatan lembaga.",c:"Denda keterlambatan Rp50 ribu yang masuk ke dana kebajikan.",r:"Fatwa DSN-MUI No. 17/DSN-MUI/IX/2000"},
+  {t:"Ta'widh",s:"dibolehkan",d:"Ganti rugi atas kerugian riil akibat kelalaian, bukan atas potensi keuntungan yang hilang.",c:"Biaya penagihan riil yang dapat dibuktikan.",r:"Fatwa DSN-MUI No. 43/DSN-MUI/VIII/2004"}
+];
+const QUIZ = [
+  {q:"Pinjam Rp1.000.000, dipotong 20% di muka, wajib kembali Rp1.070.000 dalam 7 hari. Berapa uang yang benar-benar Anda terima?",o:["Rp1.000.000","Rp930.000","Rp800.000","Rp1.070.000"],a:2,e:"Potongan 20% di muka membuat dana yang diterima hanya Rp800.000, padahal yang harus dikembalikan Rp1.070.000."},
+  {q:"Penawaran mana yang paling mungkin pinjol ilegal?",o:["Meminta akses kamera saat verifikasi wajah","Meminta akses seluruh kontak dan galeri","Menampilkan nomor izin OJK","Menjelaskan total biaya di awal"],a:1,e:"Pindar berizin hanya boleh mengakses kamera, mikrofon, dan lokasi. Akses kontak dan galeri adalah ciri pinjol ilegal."},
+  {q:"\"Profit pasti 3% per hari, dijamin tanpa rugi\" termasuk unsur apa?",o:["Wadiah","Maysir dan janji untung pasti","Ijarah","Ta'zir"],a:1,e:"Keuntungan pasti tanpa risiko adalah ciri investasi bodong dan bertentangan dengan prinsip bagi hasil."},
+  {q:"Dalam qardhul hasan, berapa yang Anda kembalikan jika meminjam Rp800.000?",o:["Rp800.000","Rp880.000","Rp800.000 ditambah bunga per bulan","Tergantung lamanya meminjam"],a:0,e:"Qardhul hasan adalah pinjaman kebajikan. Yang dikembalikan hanya pokok."},
+  {q:"Apa beda margin murabahah dengan bunga pinjaman?",o:["Tidak ada bedanya","Margin murabahah ditetapkan sekali di awal dan tidak bertambah karena waktu","Margin murabahah selalu lebih mahal","Bunga lebih sesuai syariah"],a:1,e:"Murabahah adalah jual beli dengan harga yang disepakati di awal. Bunga bertambah seiring waktu dan merupakan riba."},
+  {q:"Batas biaya pindar konsumtif per hari yang berlaku pada 2026 adalah...",o:["0,1% per hari","0,3% per hari","1% per hari","Tidak ada batas"],a:0,e:"SEOJK 19/2023 menetapkan batas manfaat ekonomi pindar konsumtif 0,1% per hari mulai 2026."}
+];
+const CHECKS = ["Ditawarkan lewat SMS atau WhatsApp pribadi","Meminta akses kontak, galeri, atau seluruh data ponsel","Tidak mencantumkan alamat kantor dan nomor izin OJK","Bunga, biaya, dan denda tidak dijelaskan di awal","Menjanjikan \"cair 5 menit\" tanpa memeriksa kemampuan bayar","Ada potongan besar di muka sehingga dana yang diterima lebih kecil","Penagihan disertai ancaman atau penyebaran data","Menjanjikan keuntungan pasti untuk investasi"];
+
+/* ================= UTIL ================= */
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const rupiah=n=>"Rp"+Math.round(n||0).toLocaleString("id-ID");
+const pct=(n,d=1)=>(isFinite(n)?n.toLocaleString("id-ID",{maximumFractionDigits:d,minimumFractionDigits:d}):"–")+"%";
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));
+const parseNum=v=>{v=String(v||"").trim(); if(/,\d+$/.test(v)) v=v.replace(/\./g,"").replace(",","."); else v=v.replace(/[.,]/g,""); return parseFloat(v)||0;};
+const fmtInput=el=>{const n=parseNum(el.value); if(n) el.value=n.toLocaleString("id-ID");};
+function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove("show"),2600);}
+const store={get(k,d){try{const v=localStorage.getItem("syarilens-"+k);return v?JSON.parse(v):d;}catch(e){return d;}},set(k,v){try{localStorage.setItem("syarilens-"+k,JSON.stringify(v));}catch(e){}}};
+function num(str){if(!str)return NaN;let s=str.trim().toLowerCase();let m=1;if(/juta|jt/.test(s))m=1e6;else if(/ribu|rb/.test(s))m=1e3;s=s.replace(/[^0-9.,]/g,"");if(/,\d{1,2}$/.test(s))s=s.replace(/\./g,"").replace(",",".");else s=s.replace(/[.,]/g,"");return parseFloat(s)*m;}
+function waShare(text){window.open("https://wa.me/?text="+encodeURIComponent(text),"_blank","noopener");}
+
+/* ================= NAV ================= */
+const VIEWS=["pindai","legalitas","simulasi","kamus","kuis","aturan","riwayat","dampak","lapor"];
+function go(v){ if(!VIEWS.includes(v)) v="pindai";
+  $$(".view").forEach(s=>s.classList.toggle("active",s.id==="v-"+v));
+  $$(".navbtn").forEach(b=>b.setAttribute("aria-current",b.dataset.view===v?"page":"false"));
+  if(v==="riwayat") renderHist(); if(v==="dampak") renderStats(); if(v==="lapor") renderReports(); if(v==="simulasi") sim(); if(v==="kuis" && !quizState) startQuiz();
+  closeMenu(); window.scrollTo({top:0});
+  if(location.hash!=="#"+v) history.replaceState(null,"","#"+v);
+}
+$$(".navbtn").forEach(b=>b.addEventListener("click",()=>go(b.dataset.view)));
+window.addEventListener("hashchange",()=>go(location.hash.slice(1)));
+const side=$("#side"), menuBtn=$("#menuBtn");
+function closeMenu(){side.classList.remove("open");menuBtn.setAttribute("aria-expanded","false");}
+menuBtn.addEventListener("click",()=>{const o=side.classList.toggle("open");menuBtn.setAttribute("aria-expanded",o);});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeMenu();});
+document.addEventListener("click",e=>{if(side.classList.contains("open") && !side.contains(e.target) && e.target!==menuBtn && !menuBtn.contains(e.target)) closeMenu();});
+
+/* theme */
+$("#themeBtn").addEventListener("click",()=>{const r=document.documentElement;const dark=matchMedia("(prefers-color-scheme: dark)").matches;const cur=r.dataset.theme||(dark?"dark":"light");r.dataset.theme=cur==="dark"?"light":"dark";store.set("theme",r.dataset.theme);});
+{const t=store.get("theme",null); if(t) document.documentElement.dataset.theme=t;}
+
+/* ================= PINDAI ================= */
+if(!store.get("welcomed",false)) $("#welcome").hidden=false;
+$("#welcomeClose").addEventListener("click",()=>{$("#welcome").hidden=true;store.set("welcomed",true);});
+$$("[data-sample]").forEach(b=>b.addEventListener("click",()=>{$("#offer").value=SAMPLES[+b.dataset.sample];scan();}));
+$("#scanBtn").addEventListener("click",scan);
+$("#clearBtn").addEventListener("click",()=>{$("#offer").value="";$("#offer").focus();});
+$("#pasteBtn").addEventListener("click",async()=>{try{const t=await navigator.clipboard.readText(); if(t){$("#offer").value=t;scan();} else toast("Papan klip kosong.");}catch(e){toast("Izin papan klip ditolak. Tempel manual dengan Ctrl+V.");}});
+$("#offer").addEventListener("keydown",e=>{if((e.ctrlKey||e.metaKey)&&e.key==="Enter")scan();});
+
+/* OCR */
+const drop=$("#drop"), fileIn=$("#imgInput");
+drop.addEventListener("click",()=>fileIn.click());
+drop.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();fileIn.click();}});
+["dragenter","dragover"].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add("over");}));
+["dragleave","drop"].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove("over");}));
+drop.addEventListener("drop",e=>{const f=e.dataTransfer.files[0]; if(f) ocr(f);});
+fileIn.addEventListener("change",e=>{const f=e.target.files[0]; if(f) ocr(f);});
+document.addEventListener("paste",e=>{ if(!$("#v-pindai").classList.contains("active")) return; const it=[...(e.clipboardData||{}).items||[]].find(i=>i.type.startsWith("image/")); if(it){e.preventDefault();ocr(it.getAsFile());}});
+async function ocr(f){const st=$("#ocrStatus"); st.textContent="Memuat pembaca teks...";
+  try{ if(!window.Tesseract){await new Promise((res,rej)=>{const s=document.createElement("script");s.src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js";s.onload=res;s.onerror=rej;document.head.appendChild(s);});}
+    const {data}=await Tesseract.recognize(f,"ind+eng",{logger:m=>{if(m.status==="recognizing text")st.textContent=`Membaca teks dari gambar... ${Math.round(m.progress*100)}%`;}});
+    $("#offer").value=data.text.trim(); st.textContent="Teks terbaca. Periksa sebentar, hasil pindaian sudah diperbarui."; scan();
+  }catch(err){ st.textContent="Gambar belum bisa dibaca di perangkat ini. Salin teks penawaran secara manual."; }}
+
+function parseOffer(t){
+  const low=t.toLowerCase();
+  const isInvest=/deposit|investasi|profit|imbal hasil|return|modal mulai/.test(low);
+  const isMurabahah=/murabahah|harga jual/.test(low);
+  const money=[...t.matchAll(/rp\s?([\d.,]+(?:\s?(?:juta|jt|ribu|rb))?)/gi)].map(m=>num(m[1]));
+  let pokok=money.length?money[0]:NaN, hargaJual=NaN;
+  const hj=t.match(/harga jual\s*rp\s?([\d.,]+(?:\s?(?:juta|jt))?)/i); if(hj) hargaJual=num(hj[1]);
+  let tenor=NaN; const tnAll=[...t.matchAll(/(?:tenor|cicil|dicicil|selama)\s*(\d+)\s*(hari|minggu|bulan)/gi)]; const tn=tnAll[0]||t.match(/(\d+)\s*(hari|minggu|bulan)\b/i);
+  if(tn){const n=+tn[1],u=tn[2].toLowerCase();tenor=u==="hari"?n:u==="minggu"?n*7:n*30;}
+  let rate=NaN; for(const m of t.matchAll(/(\d+(?:[.,]\d+)?)\s*%\s*(?:per|\/)\s*(hari|bulan|tahun)/gi)){ if(/denda/.test(low.slice(Math.max(0,m.index-40),m.index))) continue; const v=parseFloat(m[1].replace(",","."));const u=m[2].toLowerCase(); rate=u==="hari"?v:u==="bulan"?v/30:v/365; break; }
+  let potong=0; const pt=t.match(/potongan[^.]{0,25}?(\d+(?:[.,]\d+)?)\s*%/i); if(pt) potong=parseFloat(pt[1].replace(",","."));
+  let admin=0; const ad=t.match(/biaya admin[^.]{0,10}?(\d+(?:[.,]\d+)?)\s*%/i); if(ad) admin=parseFloat(ad[1].replace(",","."));
+  if(isMurabahah && isFinite(hargaJual) && isFinite(pokok) && isFinite(tenor)) rate=((hargaJual-pokok)/pokok*100)/tenor;
+  return {isInvest,isMurabahah,pokok,tenor,rate,potong,admin};
+}
+function findEntity(t){const low=t.toLowerCase();return REGISTRY.find(r=>r.aliases.some(a=>low.includes(a)))||null;}
+function annotate(t){
+  const hits=[]; RULES.forEach(r=>r.patterns.forEach(p=>{p.lastIndex=0;let m;while((m=p.exec(t))){hits.push({s:m.index,e:m.index+m[0].length,r});}}));
+  hits.sort((a,b)=>a.s-b.s||(b.e-b.s)-(a.e-a.s)); const kept=[];let last=-1; for(const h of hits){if(h.s>=last){kept.push(h);last=h.e;}}
+  let out="",pos=0; kept.forEach(h=>{out+=esc(t.slice(pos,h.s))+`<mark class="${h.r.color}" data-go="flag-${h.r.key}" tabindex="0" title="${esc(h.r.label)}">${esc(t.slice(h.s,h.e))}</mark>`;pos=h.e;}); out+=esc(t.slice(pos));
+  return {html:out,found:[...new Set(kept.map(h=>h.r.key))]};
+}
+function verdictOf({ent,an}){
+  const bad=["riba","maysir","data"].filter(k=>an.found.includes(k)).length;
+  if(ent&&ent.status==="ilegal") return {cls:"v-hindari",lvl:"hindari",title:"Hindari penawaran ini",score:92,body:`${ent.name} tercatat sebagai entitas yang dihentikan. Jangan mentransfer uang atau mengisi data apa pun.`};
+  if(!ent&&(bad>0||an.found.includes("tekanan"))) return {cls:"v-hindari",lvl:"hindari",title:"Hindari sampai legalitasnya jelas",score:80,body:"Penyelenggara tidak ditemukan di daftar berizin dan penawaran memuat penanda risiko tinggi."};
+  if(an.found.includes("riba")||an.found.includes("denda")) return {cls:"v-hati",lvl:"hati",title:"Legal, tetapi tidak sesuai syariah",score:55,body:"Penyelenggara berizin sehingga diawasi OJK, tetapi akadnya berbasis bunga. Bandingkan dengan pilihan syariah di tab Jalan keluar."};
+  if(ent&&ent.status==="berizin-syariah") return {cls:"v-aman",lvl:"aman",title:"Relatif aman, tetap baca akadnya",score:18,body:"Penyelenggara syariah berizin dengan akad yang disebut jelas. Pastikan cicilan tidak lebih dari sepertiga penghasilan."};
+  return {cls:"v-hati",lvl:"hati",title:"Perlu dicek lebih lanjut",score:45,body:"Tidak semua informasi terbaca. Pastikan nama penyelenggara dan rincian biaya sebelum memutuskan."};
+}
+function dial(score){const r=30,c=2*Math.PI*r;return `<svg class="dial" width="74" height="74" viewBox="0 0 74 74" role="img" aria-label="Tingkat risiko ${score} dari 100"><circle cx="37" cy="37" r="${r}" fill="none" stroke="var(--line)" stroke-width="8"/><circle class="prog" cx="37" cy="37" r="${r}" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${c}" data-off="${c*(1-score/100)}" transform="rotate(-90 37 37)"/><text x="37" y="42" text-anchor="middle" font-size="17" font-weight="800" fill="currentColor">${score}</text></svg>`;}
+
+let current=null;
+function scan(opts={}){
+  const t=$("#offer").value.trim(); if(!t){toast("Tempel teks penawaran dulu.");$("#offer").focus();return;}
+  const ent=findEntity(t),p=parseOffer(t),an=annotate(t); current={t,ent,p,an,syariah:/syariah/i.test(t),id:Date.now()};
+  current.v=verdictOf(current); render();
+  if(!opts.noSave){ const h=store.get("history",[]); h.unshift({id:current.id,time:new Date().toISOString(),text:t,lvl:current.v.lvl,title:current.v.title,entity:ent?ent.name:"",biaya:current.cost?current.cost.biaya:0}); store.set("history",h.slice(0,50)); updateCount();
+    const s=store.get("stats",{scans:0,risky:0,avoided:0,saved:0}); s.scans++; if(current.v.lvl!=="aman") s.risky++; store.set("stats",s);}
+}
+function render(){
+  const {ent,p,an,syariah,v}=current; const R=$("#result");
+  const legal=ent?(ent.status==="ilegal"?`<span class="status st-bad">Tercatat ilegal</span><p>${esc(ent.name)}. ${esc(ent.jenis)} (data peragaan).</p>`:`<span class="status st-good">Berizin OJK</span><p>${esc(ent.name)}. ${esc(ent.jenis)} (data peragaan).</p>`)
+    :`<span class="status st-warn">Belum terverifikasi</span><p>Nama penyelenggara tidak ditemukan di daftar berizin. Anggap belum aman sampai dicek ke Kontak OJK 157.</p><button class="btn ghost small" type="button" data-goto="legalitas">Buka cek legalitas</button>`;
+  const fake=syariah&&ent&&ent.status==="ilegal"?`<div class="flag maysir"><b>Label "syariah" dipakai entitas ilegal</b>Kata syariah bukan jaminan. Akad syariah hanya bermakna bila penyelenggaranya berizin dan diawasi DPS.</div>`:"";
+  const flags=RULES.filter(r=>an.found.includes(r.key)).map(r=>`<div class="flag ${r.color}" id="flag-${r.key}"><b>${r.label}</b>${esc(r.why)}<small>Rujukan: ${esc(r.ref)}</small></div>`).join("")||"<p>Tidak ada penanda yang terdeteksi dari teks ini. Tetap baca akad lengkapnya.</p>";
+  const legend=RULES.filter(r=>an.found.includes(r.key)).map(r=>{const k=r.color==="denda"?"riba":r.color;return `<span><i style="background:var(--${k}-bg);border:1px solid var(--${k})"></i>${r.label}</span>`;}).join("");
+  const nflag=an.found.filter(k=>k!=="baik").length;
+  R.innerHTML=`
+    <div class="verdict ${v.cls}">${dial(v.score)}<div><h2>${v.title}</h2><p>${esc(v.body)}</p></div></div>
+    <div class="card lens"><h3>Penawaran yang dipindai</h3><div class="offer">${an.html}</div><div class="legend">${legend}</div></div>
+    <div class="card">
+      <div class="tabs" role="tablist" aria-label="Rincian hasil">
+        <button class="tab" role="tab" aria-selected="true" data-tab="t-biaya">${p.isInvest?"Klaim imbal hasil":"Biaya sebenarnya"}</button>
+        <button class="tab" role="tab" aria-selected="false" data-tab="t-rambu">Rambu akad (${nflag})</button>
+        <button class="tab" role="tab" aria-selected="false" data-tab="t-legal">Legalitas</button>
+        <button class="tab" role="tab" aria-selected="false" data-tab="t-keluar">Jalan keluar</button>
+      </div>
+      <div class="tabpanel on" id="t-biaya" role="tabpanel"></div>
+      <div class="tabpanel" id="t-rambu" role="tabpanel">${fake}${flags}</div>
+      <div class="tabpanel" id="t-legal" role="tabpanel">${legal}</div>
+      <div class="tabpanel" id="t-keluar" role="tabpanel">${exits(v)}</div>
+      <div class="actions">
+        ${v.lvl!=="aman"?`<button class="btn" type="button" id="avoidBtn">Saya batal mengambil penawaran ini</button>`:""}
+        <button class="btn ghost" type="button" id="waBtn">Bagikan ke WhatsApp</button>
+        <button class="btn ghost" type="button" id="copyBtn">Salin hasil</button>
+        <button class="btn ghost" type="button" data-goto="lapor">Laporkan</button>
+      </div>
+    </div>`;
+  renderCost();
+  requestAnimationFrame(()=>{const c=R.querySelector("circle.prog"); if(c) c.style.strokeDashoffset=c.dataset.off;});
+  R.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>openTab(b.dataset.tab)));
+  R.querySelectorAll("mark[data-go]").forEach(m=>{const f=()=>{openTab("t-rambu");const el=document.getElementById(m.dataset.go);if(el){el.scrollIntoView({behavior:"smooth",block:"center"});el.classList.add("pulse");setTimeout(()=>el.classList.remove("pulse"),1400);}};m.addEventListener("click",f);m.addEventListener("keydown",e=>{if(e.key==="Enter")f();});});
+  R.querySelectorAll("[data-goto]").forEach(b=>b.addEventListener("click",()=>go(b.dataset.goto)));
+  const av=$("#avoidBtn"); if(av) av.addEventListener("click",()=>{const s=store.get("stats",{scans:0,risky:0,avoided:0,saved:0}); s.avoided++; s.saved+=current.cost?current.cost.biaya:0; store.set("stats",s); av.disabled=true; av.textContent="Tercatat. Keputusan yang bijak"; toast(current.cost&&current.cost.biaya?`Anda menghindari biaya ${rupiah(current.cost.biaya)}. Lihat di Dampak saya.`:"Tercatat di Dampak saya.");});
+  $("#waBtn").addEventListener("click",()=>waShare(summary()));
+  $("#copyBtn").addEventListener("click",async()=>{try{await navigator.clipboard.writeText(summary());toast("Hasil disalin. Tempel di chat untuk dikirim.");}catch(e){toast("Salin manual dari layar.");}});
+  if(innerWidth<1100) R.scrollIntoView({behavior:"smooth",block:"start"});
+}
+function openTab(id){$$("#result .tab").forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===id));$$("#result .tabpanel").forEach(p=>p.classList.toggle("on",p.id===id));}
+function renderCost(){
+  const {p}=current,B=$("#t-biaya");
+  if(p.isInvest){const y=p.rate*365;B.innerHTML=`<span class="status st-bad">Tidak wajar</span><div class="bignum tabular">${pct(y,0)}<small>janji imbal hasil setahun (${pct(p.rate)} per hari, tanpa dibungakan)</small></div><p>Sebagai pembanding, sukuk tabungan negara seri ST016 tenor 4 tahun (2026) menawarkan imbalan minimal 6,25% per tahun. Janji ratusan persen per tahun yang "pasti" hampir selalu skema ponzi.</p>`;current.cost=null;return;}
+  const d={pokok:isFinite(p.pokok)?p.pokok:1e6,tenor:isFinite(p.tenor)?p.tenor:30,rate:isFinite(p.rate)?p.rate:0,potong:p.potong||0,admin:p.admin||0};
+  B.innerHTML=`<p style="margin-top:0" class="hint">Angka yang terbaca dari teks. Koreksi bila salah, hasil langsung dihitung ulang.</p>
+   <div class="fields">
+    <div><label class="f" for="f-pokok">Pokok (Rp)</label><input id="f-pokok" inputmode="numeric" value="${Math.round(d.pokok).toLocaleString("id-ID")}"></div>
+    <div><label class="f" for="f-tenor">Tenor (hari)</label><input id="f-tenor" inputmode="numeric" value="${d.tenor}"></div>
+    <div><label class="f" for="f-rate">${p.isMurabahah?"Margin setara per hari (%)":"Bunga per hari (%)"}</label><input id="f-rate" inputmode="decimal" data-exact="${d.rate}" value="${String(+d.rate.toFixed(4)).replace(".",",")}"></div>
+    <div><label class="f" for="f-potong">Potongan di muka (%)</label><input id="f-potong" inputmode="decimal" value="${d.potong}"></div>
+    <div><label class="f" for="f-admin">Biaya admin (%)</label><input id="f-admin" inputmode="decimal" value="${d.admin}"></div>
+   </div><div id="costOut"></div>`;
+  B.querySelectorAll("input").forEach(i=>i.addEventListener("input",()=>{delete i.dataset.exact;calc();}));
+  calc();
+}
+function calc(){
+  const g=id=>{const el=$("#"+id);return el.dataset.exact!==undefined?parseFloat(el.dataset.exact)||0:parseNum(el.value);};
+  const pokok=g("f-pokok"),tenor=Math.max(1,g("f-tenor")),rate=g("f-rate")/100,potong=g("f-potong")/100,admin=g("f-admin")/100;
+  const diterima=pokok*(1-potong), bayar=pokok+pokok*rate*tenor+pokok*admin, biaya=bayar-diterima;
+  const hari=biaya/diterima*100/tenor, tahun=hari*365, qardh=diterima, mur=diterima*(1+0.01*(tenor/30)), max=Math.max(bayar,qardh,mur);
+  current.cost={pokok,diterima,bayar,biaya,hari,tenor};
+  $("#costOut").innerHTML=`<div class="bignum tabular">${rupiah(biaya)}<small>biaya untuk menerima ${rupiah(diterima)} selama ${tenor} hari</small></div>
+   <p class="tabular">Setara <b>${pct(hari,2)} per hari</b> atau sekitar <b>${pct(tahun,0)} per tahun</b> dari uang yang benar-benar diterima. ${hari>0.1?`<span class="status st-bad">${(hari/0.1).toLocaleString("id-ID",{maximumFractionDigits:1})} kali batas 0,1% per hari</span>`:`<span class="status st-good">Di bawah batas 0,1% per hari</span>`}</p>
+   <div class="bars tabular">
+    <div class="bar"><span>Penawaran ini</span><div class="track"><div class="fill a" style="width:${bayar/max*100}%"></div></div><b>${rupiah(bayar)}</b></div>
+    <div class="bar"><span>Murabahah (ilustrasi 1%/bulan)</span><div class="track"><div class="fill d" style="width:${mur/max*100}%"></div></div><b>${rupiah(mur)}</b></div>
+    <div class="bar"><span>Qardhul hasan</span><div class="track"><div class="fill c" style="width:${qardh/max*100}%"></div></div><b>${rupiah(qardh)}</b></div>
+   </div>`;
+}
+function exits(v){
+  const p=current.p,items=[];
+  if(p.isInvest){items.push("Simpan dana di instrumen yang diawasi, misalnya sukuk tabungan negara, reksa dana syariah, atau tabungan mudharabah.");items.push("Cek legalitas investasi ke Kontak OJK 157 sebelum mentransfer apa pun.");}
+  else{items.push("Butuh dana darurat kecil? Tanyakan qardhul hasan di BMT, lembaga amil zakat, atau kas sosial masjid. Anda hanya mengembalikan pokok.");items.push("Butuh membeli barang? Pilih murabahah di bank syariah atau BPRS. Harga jual dan cicilan tetap sejak awal.");items.push("Butuh modal usaha? Bandingkan pindar syariah berizin dan BMT dengan akad musyarakah atau murabahah.");}
+  if(v.lvl==="hindari") items.push("Telanjur memberi data atau mentransfer? Simpan bukti, blokir nomor penawar, lalu laporkan ke Kontak OJK 157 atau WhatsApp 081-157-157-157 secepatnya.");
+  return `<ul class="exits">${items.map(i=>`<li>${esc(i)}</li>`).join("")}</ul><div class="row" style="margin-top:10px"><button class="btn ghost small" type="button" data-goto="simulasi">Bandingkan di simulasi biaya</button><button class="btn ghost small" type="button" data-goto="kamus">Pelajari istilahnya</button></div>`;
+}
+function summary(){const {ent,an,v}=current,c=current.cost;const L=[`Hasil SYARILENS: ${v.title}`];L.push(`Legalitas: ${ent?ent.name+" ("+(ent.status==="ilegal"?"tercatat ilegal":"berizin")+")":"belum terverifikasi"}`);if(c)L.push(`Biaya sebenarnya: ${rupiah(c.biaya)} untuk ${rupiah(c.diterima)} (${pct(c.hari,2)} per hari)`);const l=RULES.filter(r=>an.found.includes(r.key)).map(r=>r.label);if(l.length)L.push(`Penanda: ${l.join(", ")}`);L.push("Cek penawaranmu di syarilens-indonesia.vercel.app");return L.join("\n");}
+
+/* ================= LEGALITAS ================= */
+function renderLegal(){const q=$("#legalQ").value.trim().toLowerCase();const rows=REGISTRY.filter(r=>!q||r.name.toLowerCase().includes(q)||r.aliases.some(a=>a.includes(q)));
+  $("#legalList").innerHTML=rows.length?rows.map(r=>{const st=r.status==="ilegal"?`<span class="status st-bad">Ilegal</span>`:r.status==="berizin-syariah"?`<span class="status st-good">Berizin, syariah</span>`:`<span class="status st-warn">Berizin, konvensional</span>`;return `<div class="item"><span class="dot" style="background:var(--${r.status==="ilegal"?"riba":r.status==="berizin"?"gharar":"baik"})"></span><div><b>${esc(r.name)}</b><p>${esc(r.jenis)}</p></div>${st}</div>`;}).join("")
+   :`<div class="item"><span class="dot" style="background:var(--gharar)"></span><div><b>Belum ditemukan</b><p>Nama ini tidak ada di daftar. Anggap belum aman sampai dikonfirmasi ke Kontak OJK 157.</p></div><span class="status st-warn">Belum terverifikasi</span></div>`;}
+$("#legalQ").addEventListener("input",renderLegal);
+$("#checklist").innerHTML=CHECKS.map((c,i)=>`<label><input type="checkbox" data-ck="${i}"> <span>${esc(c)}</span></label>`).join("");
+function renderCheck(){const n=$$("[data-ck]:checked").length;$("#checkOut").innerHTML=n===0?`<span class="status st-good">Belum ada ciri yang dicentang</span>`:n<3?`<span class="status st-warn">${n} ciri ditemukan</span><p>Berhati-hatilah. Pastikan legalitas sebelum melanjutkan.</p>`:`<span class="status st-bad">${n} ciri ditemukan</span><p>Penawaran ini sangat mungkin ilegal. Jangan mengirim data atau uang.</p>`;}
+$("#checklist").addEventListener("change",renderCheck);
+
+/* ================= SIMULASI ================= */
+["s-need","s-days","s-income","s-pr","s-pc","s-yr","s-ya","s-mm","s-qa"].forEach(id=>{const el=$("#"+id);el.addEventListener("input",sim);if(["s-need","s-income","s-qa"].includes(id))el.addEventListener("blur",()=>{fmtInput(el);});});
+function sim(){
+  const need=parseNum($("#s-need").value)||0,days=Math.max(1,parseNum($("#s-days").value)),inc=parseNum($("#s-income").value),months=Math.max(1,days/30);
+  const pr=parseNum($("#s-pr").value)/100,pc=parseNum($("#s-pc").value)/100,yr=parseNum($("#s-yr").value)/100,ya=parseNum($("#s-ya").value)/100,mm=parseNum($("#s-mm").value)/100,qa=parseNum($("#s-qa").value);
+  const pinjolPokok=pc<1?need/(1-pc):need;
+  const S=[
+    {k:"s-pinjol",n:"Pinjol berbunga",tag:`<span class="status st-bad">Riba</span>`,bayar:pinjolPokok*(1+pr*days)},
+    {k:"s-pay",n:"<i>Paylater</i> berbunga",tag:`<span class="status st-bad">Riba</span>`,bayar:need*(1+yr*months+ya)},
+    {k:"s-mur",n:"Murabahah",tag:`<span class="status st-good">Sesuai syariah</span>`,bayar:need*(1+mm*days/365)},
+    {k:"s-qardh",n:"Qardhul hasan",tag:`<span class="status st-good">Sesuai syariah</span>`,bayar:need+qa}
+  ];
+  S.forEach(s=>{s.biaya=s.bayar-need;s.hari=s.biaya/need*100/days;s.cicil=s.bayar/months;});
+  const best=S.reduce((a,b)=>a.bayar<b.bayar?a:b);
+  $("#schemes").innerHTML=S.map(s=>{const ratio=inc?s.cicil/inc*100:NaN;return `<div class="scheme ${s.k}"><h3>${s.n}</h3>${s.tag}
+   <dl class="tabular"><dt>Total bayar</dt><dd>${rupiah(s.bayar)}</dd><dt>Biaya</dt><dd>${rupiah(s.biaya)}</dd><dt>Per hari</dt><dd>${pct(s.hari,2)}</dd><dt>Setoran per bulan</dt><dd>${rupiah(s.cicil)}</dd>${inc?`<dt>Dari penghasilan</dt><dd style="color:var(--${ratio>30?"riba":"baik"})">${pct(ratio,0)}</dd>`:""}</dl>
+   ${s===best?`<p class="hint" style="margin:10px 0 0">Paling ringan untuk kebutuhan ini.</p>`:""}</div>`;}).join("");
+  const max=Math.max(...S.map(s=>s.bayar)),cls={"s-pinjol":"a","s-pay":"b","s-mur":"d","s-qardh":"c"};
+  $("#simBars").innerHTML=S.map(s=>`<div class="bar tabular"><span>${s.n}</span><div class="track"><div class="fill ${cls[s.k]}" style="width:${s.bayar/max*100}%"></div></div><b>${rupiah(s.bayar)}</b></div>`).join("");
+}
+
+/* ================= KAMUS ================= */
+let kf="semua";
+function renderTerms(){const q=$("#kamusQ").value.trim().toLowerCase();const rows=TERMS.filter(x=>(kf==="semua"||x.s===kf)&&(!q||(x.t+" "+x.d).toLowerCase().includes(q)));
+  $("#terms").innerHTML=rows.map(x=>`<article class="term"><h3>${esc(x.t)} <span class="status ${x.s==="dilarang"?"st-bad":"st-good"}">${x.s==="dilarang"?"Dilarang":"Dibolehkan"}</span></h3><p>${esc(x.d)}</p><p><b>Contoh.</b> ${esc(x.c)}</p><small>Rujukan: ${esc(x.r)}</small></article>`).join("")||`<p class="empty">Istilah tidak ditemukan. Coba kata lain.</p>`;}
+$("#kamusQ").addEventListener("input",renderTerms);
+$$("[data-kf]").forEach(b=>b.addEventListener("click",()=>{kf=b.dataset.kf;$$("[data-kf]").forEach(x=>x.setAttribute("aria-pressed",x===b));renderTerms();}));
+
+/* ================= KUIS ================= */
+let quizState=null;
+function startQuiz(){quizState={i:0,score:0,answered:false};drawQuiz();}
+function drawQuiz(){const Q=$("#quizBox");const s=quizState;
+  if(s.i>=QUIZ.length){const best=Math.max(store.get("quizBest",0),s.score);store.set("quizBest",best);const badge=s.score===QUIZ.length?"Pembaca Akad Teliti":s.score>=4?"Penjaga Dompet":"Pemula yang Berani Belajar";
+    Q.innerHTML=`<div class="progress"><div style="width:100%"></div></div><p class="quiz-q">Skor Anda ${s.score} dari ${QUIZ.length}</p><p><span class="status st-good">Lencana: ${badge}</span></p><p class="hint">Skor terbaik Anda ${best} dari ${QUIZ.length}.</p><div class="row"><button class="btn" type="button" id="qAgain">Ulangi kuis</button><button class="btn ghost" type="button" id="qShare">Tantang teman lewat WhatsApp</button></div>`;
+    $("#qAgain").addEventListener("click",startQuiz);$("#qShare").addEventListener("click",()=>waShare(`Skor kuis literasi keuangan syariahku di SYARILENS ${s.score}/${QUIZ.length}. Coba kalahkan di syarilens-indonesia.vercel.app`));return;}
+  const q=QUIZ[s.i];Q.innerHTML=`<div class="progress"><div style="width:${s.i/QUIZ.length*100}%"></div></div><p class="hint">Pertanyaan ${s.i+1} dari ${QUIZ.length}</p><p class="quiz-q">${esc(q.q)}</p><div class="opts">${q.o.map((o,j)=>`<button class="opt" type="button" data-o="${j}">${esc(o)}</button>`).join("")}</div><div id="qFeed" aria-live="polite"></div>`;
+  Q.querySelectorAll(".opt").forEach(b=>b.addEventListener("click",()=>{if(s.answered)return;s.answered=true;const j=+b.dataset.o,ok=j===q.a;if(ok)s.score++;
+    Q.querySelectorAll(".opt").forEach(x=>{const k=+x.dataset.o;if(k===q.a)x.classList.add("right");else if(k===j)x.classList.add("wrong");x.disabled=true;});
+    $("#qFeed").innerHTML=`<p style="margin:14px 0 10px"><b>${ok?"Tepat.":"Belum tepat."}</b> ${esc(q.e)}</p><button class="btn" type="button" id="qNext">${s.i+1<QUIZ.length?"Pertanyaan berikutnya":"Lihat skor"}</button>`;
+    $("#qNext").addEventListener("click",()=>{s.i++;s.answered=false;drawQuiz();});$("#qNext").focus();}));}
+
+/* ================= ATURAN ================= */
+$("#rulesBody").innerHTML=RULES.map(r=>`<tr><td><mark class="${r.color}">${r.label}</mark></td><td>${esc(r.find)}</td><td>${esc(r.why)}</td><td>${esc(r.ref)}</td></tr>`).join("")
+ +`<tr><td><b>Legalitas</b></td><td>nama penyelenggara dicocokkan dengan daftar berizin dan daftar entitas yang dihentikan</td><td>Pinjol ilegal tidak diawasi, tidak tunduk pada batas biaya, dan sering menagih dengan intimidasi.</td><td>Data OJK dan Satgas PASTI (purwarupa memakai data peragaan)</td></tr>`
+ +`<tr><td><b>Biaya sebenarnya</b></td><td>pokok, dana yang benar-benar diterima, tenor, bunga atau margin, biaya lain</td><td>Biaya per hari dibandingkan dengan batas manfaat ekonomi pindar konsumtif 0,1% per hari (2026).</td><td>SEOJK No. 19/SEOJK.06/2023</td></tr>`;
+
+/* ================= RIWAYAT ================= */
+function updateCount(){$("#histCount").textContent=store.get("history",[]).length;}
+function renderHist(){const h=store.get("history",[]);const col={hindari:"riba",hati:"gharar",aman:"baik"};
+  $("#histList").innerHTML=h.length?h.map(x=>`<div class="item"><span class="dot" style="background:var(--${col[x.lvl]})"></span><button type="button" data-open="${x.id}" style="all:unset;cursor:pointer;display:block"><b>${esc(x.title)}</b><p>${esc(x.text)}</p><span class="meta">${new Date(x.time).toLocaleString("id-ID",{dateStyle:"medium",timeStyle:"short"})}${x.biaya?" · biaya "+rupiah(x.biaya):""}</span></button><button class="btn ghost small" type="button" data-del="${x.id}" aria-label="Hapus">Hapus</button></div>`).join("")
+   :`<div class="card empty"><strong>Belum ada riwayat</strong>Pindai penawaran pertama Anda, hasilnya akan tersimpan di sini.<div class="row" style="margin-top:12px"><button class="btn" type="button" data-goto2="pindai">Mulai memindai</button></div></div>`;
+  $$("[data-open]").forEach(b=>b.addEventListener("click",()=>{const x=h.find(i=>String(i.id)===b.dataset.open);if(!x)return;go("pindai");$("#offer").value=x.text;scan({noSave:true});}));
+  $$("[data-del]").forEach(b=>b.addEventListener("click",()=>{store.set("history",h.filter(i=>String(i.id)!==b.dataset.del));updateCount();renderHist();toast("Riwayat dihapus.");}));
+  $$("[data-goto2]").forEach(b=>b.addEventListener("click",()=>go(b.dataset.goto2)));}
+$("#clearHist").addEventListener("click",()=>{if(!store.get("history",[]).length)return;if(confirm("Hapus semua riwayat pindaian di perangkat ini?")){store.set("history",[]);updateCount();renderHist();toast("Semua riwayat dihapus.");}});
+
+/* ================= DAMPAK ================= */
+function renderStats(){const s=store.get("stats",{scans:0,risky:0,avoided:0,saved:0}),best=store.get("quizBest",0),rep=store.get("reports",[]).length;
+  const T=[["Penawaran dipindai",s.scans],["Penawaran berisiko terdeteksi",s.risky],["Penawaran yang Anda tolak",s.avoided],["Biaya yang terhindar",rupiah(s.saved)],["Skor kuis terbaik",`${best}/${QUIZ.length}`],["Laporan modus",rep]];
+  $("#stats").innerHTML=T.map(([k,v])=>`<div class="stat"><div class="v tabular">${v}</div><div class="k">${k}</div></div>`).join("");}
+$("#shareImpact").addEventListener("click",()=>{const s=store.get("stats",{scans:0,avoided:0,saved:0});waShare(`Aku sudah memindai ${s.scans} penawaran keuangan dengan SYARILENS dan menghindari biaya ${rupiah(s.saved)}. Sebelum pinjam atau investasi, cek dulu di syarilens-indonesia.vercel.app`);});
+$("#resetImpact").addEventListener("click",()=>{if(confirm("Atur ulang semua angka dampak?")){store.set("stats",{scans:0,risky:0,avoided:0,saved:0});renderStats();}});
+
+/* ================= LAPOR ================= */
+function renderReports(){const r=store.get("reports",[]);$("#reportList").innerHTML=r.length?r.map(x=>`<div class="item"><span class="dot" style="background:var(--tekanan)"></span><div><b>${esc(x.type)}</b><p>${esc(x.name||"Tanpa nama")} · ${esc(x.chan)}</p><span class="meta">${new Date(x.time).toLocaleDateString("id-ID",{dateStyle:"medium"})}</span></div><button class="btn ghost small" type="button" data-copyrep="${x.time}">Salin</button></div>`).join(""):`<p class="empty">Belum ada laporan.</p>`;
+  $$("[data-copyrep]").forEach(b=>b.addEventListener("click",async()=>{const x=r.find(i=>i.time===b.dataset.copyrep);try{await navigator.clipboard.writeText(repText(x));toast("Laporan disalin. Kirim ke Kontak OJK 157.");}catch(e){toast("Salin manual dari kolom isi.");}}));}
+const repText=x=>`Laporan dugaan ${x.type}\nPelaku: ${x.name||"-"}\nDiterima lewat: ${x.chan}\nIsi penawaran: ${x.text}`;
+$("#useScan").addEventListener("click",()=>{if(!current){toast("Belum ada pindaian.");return;}$("#r-text").value=current.t;if(current.ent)$("#r-name").value=current.ent.name;if(current.p.isInvest)$("#r-type").value="Investasi bodong";});
+$("#reportForm").addEventListener("submit",e=>{e.preventDefault();const x={type:$("#r-type").value,chan:$("#r-chan").value,name:$("#r-name").value.trim(),text:$("#r-text").value.trim(),time:new Date().toISOString()};
+  if(!x.text){$("#reportMsg").textContent="Isi penawaran wajib diisi agar modus dapat dipelajari.";$("#r-text").focus();return;}
+  const r=store.get("reports",[]);r.unshift(x);store.set("reports",r.slice(0,30));$("#reportMsg").textContent="Laporan tersimpan. Terima kasih, laporan Anda membantu memperbarui daftar periksa.";e.target.reset();renderReports();toast("Laporan terkirim ke daftar periksa.");});
+
+/* ================= INIT ================= */
+document.addEventListener("click",e=>{const b=e.target.closest("[data-goto]");if(b&&!b.closest("#result"))go(b.dataset.goto);});
+updateCount();renderLegal();renderCheck();renderTerms();
+go(location.hash.slice(1)||"pindai");
+})();
+</script>
+</body>
+</html>
